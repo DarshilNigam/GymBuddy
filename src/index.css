@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased selection:bg-brand-primary selection:text-white dark:bg-[#07090e] dark:text-slate-100 dark:selection:bg-brand-neon dark:selection:text-black;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Custom Clean Sports-Tech Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+}
+
+/* Pulse & Shimmer Keyframes */
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px -3px rgba(0, 245, 160, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 35px -3px rgba(0, 245, 160, 0.6);
+  }
+}
+
+@keyframes bluePulse {
+  0%, 100% {
+    box-shadow: 0 0 20px -3px rgba(37, 99, 235, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 35px -3px rgba(37, 99, 235, 0.45);
+  }
+}
+
+.animate-glow-pulse {
+  animation: neonPulse 3s infinite ease-in-out;
+}
+
+.animate-blue-pulse {
+  animation: bluePulse 3s infinite ease-in-out;
+}
