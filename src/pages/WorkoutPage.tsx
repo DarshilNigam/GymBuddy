@@ -11,7 +11,6 @@ import { WorkoutHeader } from '../components/workout/WorkoutHeader';
 import { FormFeedbackAlert } from '../components/workout/FormFeedbackAlert';
 import { CalibrationGuide } from '../components/workout/CalibrationGuide';
 import { ShowMeHowModal } from '../components/workout/ShowMeHowModal';
-import { WorkoutCountdown } from '../components/workout/WorkoutCountdown';
 import { Button } from '../components/ui/Button';
 import { Sparkles, ShieldCheck, HelpCircle } from 'lucide-react';
 import { cn } from '../utils/cn';
@@ -24,7 +23,6 @@ export interface WorkoutPageProps {
 
 export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPageProps) {
   const [showCalibration, setShowCalibration] = useState(true);
-  const [isCountingDown, setIsCountingDown] = useState(false);
   const [showHowToModal, setShowHowToModal] = useState(false);
   const [currentLandmarks, setCurrentLandmarks] = useState<Landmark[]>([]);
 
@@ -69,7 +67,7 @@ export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPagePr
         return;
       }
       setCurrentLandmarks(frame.detected ? frame.landmarks : []);
-      // Only process reps and angle updates when active (not during countdown or when paused)
+      // Process pose frame in real-time
       processPoseFrame(frame.landmarks, frame.timestamp);
     },
     [isStreaming, processPoseFrame]
@@ -84,14 +82,9 @@ export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPagePr
 
   const isPaused = status === 'paused';
 
-  // Handle starting workout from calibration
+  // Handle starting workout from calibration immediately (no countdown)
   const handleCalibrationReady = () => {
     setShowCalibration(false);
-    setIsCountingDown(true);
-  };
-
-  const handleCountdownComplete = () => {
-    setIsCountingDown(false);
     startWorkout();
   };
 
@@ -146,15 +139,6 @@ export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPagePr
                     : 'h-[370px] sm:h-[420px] lg:h-[450px] xl:h-[490px]'
                 )}
               />
-
-              {/* 3-2-1 Countdown Overlay */}
-              {isCountingDown && (
-                <WorkoutCountdown
-                  exerciseName={exercise.name}
-                  onComplete={handleCountdownComplete}
-                  onSkip={handleCountdownComplete}
-                />
-              )}
             </div>
 
             {/* Form Feedback Alert Bar (active workout only) */}
