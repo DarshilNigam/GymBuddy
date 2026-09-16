@@ -4,6 +4,7 @@ import { X, Check, AlertTriangle, Sparkles, Camera, ShieldCheck, ArrowRight } fr
 import { PUSHUP_CONFIG, SITUP_CONFIG } from '../../engine/exercises/exerciseConfig';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
+import { PushUpSkeletonVisual } from './PushUpSkeletonVisual';
 import { cn } from '../../utils/cn';
 
 export interface ShowMeHowModalProps {
@@ -178,25 +179,7 @@ function PushupGuideContent() {
             description="Hold stable horizontal plank. Arms straight, core braced."
             arrowText="Arms Locked"
             badgeColor="neon"
-            svg={
-              <svg viewBox="0 0 200 90" className="w-full h-24">
-                {/* Floor */}
-                <line x1="10" y1="75" x2="190" y2="75" stroke="#334155" strokeWidth="2" strokeDasharray="4 4" />
-                {/* Body straight line: Shoulder (50, 40) -> Hip (110, 43) -> Ankle (170, 48) */}
-                <line x1="50" y1="40" x2="110" y2="43" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="110" y1="43" x2="170" y2="48" stroke="#00F5A0" strokeWidth="3.5" />
-                {/* Arm: Shoulder (50, 40) -> Elbow (50, 56) -> Wrist (50, 73) */}
-                <line x1="50" y1="40" x2="50" y2="73" stroke="#00D9F5" strokeWidth="3.5" />
-                {/* Joints */}
-                <circle cx="50" cy="40" r="4.5" fill="#00D9F5" />
-                <circle cx="50" cy="56" r="3.5" fill="#00F5A0" />
-                <circle cx="50" cy="73" r="4" fill="#00D9F5" />
-                <circle cx="110" cy="43" r="4" fill="#00F5A0" />
-                <circle cx="170" cy="48" r="4" fill="#00F5A0" />
-                {/* Head */}
-                <circle cx="35" cy="36" r="6" fill="#64748B" />
-              </svg>
-            }
+            svg={<PushUpSkeletonVisual stage="lockout" showFloor={true} className="w-full h-24" />}
           />
 
           {/* Stage 2 */}
@@ -207,24 +190,7 @@ function PushupGuideContent() {
             description="Lower chest smoothly. Maintain straight spine without hip sag."
             arrowText="Downward Drive ↓"
             badgeColor="cyan"
-            svg={
-              <svg viewBox="0 0 200 90" className="w-full h-24">
-                <line x1="10" y1="75" x2="190" y2="75" stroke="#334155" strokeWidth="2" strokeDasharray="4 4" />
-                <line x1="50" y1="50" x2="110" y2="52" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="110" y1="52" x2="170" y2="55" stroke="#00F5A0" strokeWidth="3.5" />
-                {/* Bending arm */}
-                <line x1="50" y1="50" x2="40" y2="60" stroke="#00D9F5" strokeWidth="3.5" />
-                <line x1="40" y1="60" x2="50" y2="73" stroke="#00D9F5" strokeWidth="3.5" />
-                <circle cx="50" cy="50" r="4" fill="#00D9F5" />
-                <circle cx="40" cy="60" r="4" fill="#00F5A0" />
-                <circle cx="50" cy="73" r="4" fill="#00D9F5" />
-                <circle cx="110" cy="52" r="4" fill="#00F5A0" />
-                <circle cx="170" cy="55" r="4" fill="#00F5A0" />
-                <circle cx="35" cy="46" r="6" fill="#64748B" />
-                {/* Motion arrow */}
-                <path d="M 50 30 L 50 42 M 46 38 L 50 42 L 54 38" stroke="#00D9F5" strokeWidth="2" fill="none" />
-              </svg>
-            }
+            svg={<PushUpSkeletonVisual stage="descent" showFloor={true} className="w-full h-24" />}
           />
 
           {/* Stage 3 */}
@@ -236,21 +202,13 @@ function PushupGuideContent() {
             arrowText="Depth Verified"
             badgeColor="neon"
             svg={
-              <svg viewBox="0 0 200 90" className="w-full h-24">
-                <line x1="10" y1="75" x2="190" y2="75" stroke="#334155" strokeWidth="2" strokeDasharray="4 4" />
-                {/* Deep bottom: body close to floor */}
-                <line x1="50" y1="60" x2="110" y2="61" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="110" y1="61" x2="170" y2="63" stroke="#00F5A0" strokeWidth="3.5" />
-                {/* Elbow bent at 90 deg: Shoulder (50, 60) -> Elbow (33, 62) -> Wrist (50, 73) */}
-                <line x1="50" y1="60" x2="33" y2="62" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="33" y1="62" x2="50" y2="73" stroke="#00F5A0" strokeWidth="3.5" />
-                <circle cx="50" cy="60" r="4" fill="#00D9F5" />
-                <circle cx="33" cy="62" r="5" fill="#00F5A0" />
-                <circle cx="50" cy="73" r="4" fill="#00D9F5" />
-                <circle cx="110" cy="61" r="4" fill="#00F5A0" />
-                <circle cx="170" cy="63" r="4" fill="#00F5A0" />
-                <circle cx="35" cy="56" r="6" fill="#64748B" />
-              </svg>
+              <PushUpSkeletonVisual
+                stage="depth"
+                showFloor={true}
+                showAngleArc={true}
+                highlightJoint="elbow"
+                className="w-full h-24"
+              />
             }
           />
 
@@ -262,22 +220,7 @@ function PushupGuideContent() {
             description="Push forcefully through palms. Spine stays in straight alignment."
             arrowText="Ascent Drive ↑"
             badgeColor="amber"
-            svg={
-              <svg viewBox="0 0 200 90" className="w-full h-24">
-                <line x1="10" y1="75" x2="190" y2="75" stroke="#334155" strokeWidth="2" strokeDasharray="4 4" />
-                <line x1="50" y1="48" x2="110" y2="50" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="110" y1="50" x2="170" y2="53" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="50" y1="48" x2="42" y2="58" stroke="#F59E0B" strokeWidth="3.5" />
-                <line x1="42" y1="58" x2="50" y2="73" stroke="#F59E0B" strokeWidth="3.5" />
-                <circle cx="50" cy="48" r="4" fill="#00D9F5" />
-                <circle cx="42" cy="58" r="4" fill="#F59E0B" />
-                <circle cx="50" cy="73" r="4" fill="#00D9F5" />
-                <circle cx="110" cy="50" r="4" fill="#00F5A0" />
-                <circle cx="170" cy="53" r="4" fill="#00F5A0" />
-                <circle cx="35" cy="44" r="6" fill="#64748B" />
-                <path d="M 50 38 L 50 26 M 46 30 L 50 26 L 54 30" stroke="#F59E0B" strokeWidth="2" fill="none" />
-              </svg>
-            }
+            svg={<PushUpSkeletonVisual stage="ascent" showFloor={true} className="w-full h-24" />}
           />
 
           {/* Stage 5 */}
@@ -288,20 +231,7 @@ function PushupGuideContent() {
             description="Fully extend arms at top to complete cycle."
             arrowText="Lockout Held"
             badgeColor="neon"
-            svg={
-              <svg viewBox="0 0 200 90" className="w-full h-24">
-                <line x1="10" y1="75" x2="190" y2="75" stroke="#334155" strokeWidth="2" strokeDasharray="4 4" />
-                <line x1="50" y1="40" x2="110" y2="43" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="110" y1="43" x2="170" y2="48" stroke="#00F5A0" strokeWidth="3.5" />
-                <line x1="50" y1="40" x2="50" y2="73" stroke="#00F5A0" strokeWidth="3.5" />
-                <circle cx="50" cy="40" r="4.5" fill="#00F5A0" />
-                <circle cx="50" cy="56" r="3.5" fill="#00F5A0" />
-                <circle cx="50" cy="73" r="4" fill="#00D9F5" />
-                <circle cx="110" cy="43" r="4" fill="#00F5A0" />
-                <circle cx="170" cy="48" r="4" fill="#00F5A0" />
-                <circle cx="35" cy="36" r="6" fill="#64748B" />
-              </svg>
-            }
+            svg={<PushUpSkeletonVisual stage="lockout" showFloor={true} className="w-full h-24" />}
           />
 
           {/* Stage 6 */}

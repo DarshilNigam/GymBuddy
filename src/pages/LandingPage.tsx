@@ -21,6 +21,7 @@ import {
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Card } from '../components/ui/Card';
+import { PushUpSkeletonVisual } from '../components/workout/PushUpSkeletonVisual';
 
 export interface LandingPageProps {
   onStart: () => void;
@@ -141,27 +142,12 @@ export function LandingPage({
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:14px_14px] pointer-events-none" />
 
                 <div className="relative z-10 w-full h-full flex items-center justify-center">
-                  <svg viewBox="0 0 300 180" className="w-full h-full max-h-[130px] drop-shadow-[0_0_10px_rgba(0,217,245,0.4)]">
-                    {/* Torso line */}
-                    <line x1="100" y1="80" x2="160" y2="95" stroke="#00D9F5" strokeWidth="3.5" strokeLinecap="round" />
-                    {/* Upper arm */}
-                    <line x1="100" y1="80" x2="80" y2="120" stroke="#00F5A0" strokeWidth="3.5" strokeLinecap="round" />
-                    {/* Forearm to ground */}
-                    <line x1="80" y1="120" x2="95" y2="150" stroke="#00F5A0" strokeWidth="3.5" strokeLinecap="round" />
-                    {/* Upper leg */}
-                    <line x1="160" y1="95" x2="220" y2="120" stroke="#00D9F5" strokeWidth="3.5" strokeLinecap="round" />
-                    {/* Lower leg */}
-                    <line x1="220" y1="120" x2="255" y2="150" stroke="#00D9F5" strokeWidth="3.5" strokeLinecap="round" />
-
-                    {/* Landmarks */}
-                    <circle cx="70" cy="72" r="8" fill="#3B82F6" stroke="#ffffff" strokeWidth="1.5" />
-                    <circle cx="100" cy="80" r="4.5" fill="#00F5A0" stroke="#ffffff" strokeWidth="1.5" />
-                    <circle cx="80" cy="120" r="6" fill="#F59E0B" stroke="#ffffff" strokeWidth="1.5" className="animate-pulse" />
-                    <circle cx="95" cy="150" r="4.5" fill="#00F5A0" stroke="#ffffff" strokeWidth="1.5" />
-                    <circle cx="160" cy="95" r="4.5" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                    <circle cx="220" cy="120" r="4.5" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                    <circle cx="255" cy="150" r="4.5" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                  </svg>
+                  <PushUpSkeletonVisual
+                    stage="hero"
+                    showFloor={true}
+                    showAngleArc={true}
+                    className="w-full h-full max-h-[130px] drop-shadow-[0_0_10px_rgba(0,217,245,0.4)]"
+                  />
                 </div>
 
                 {/* Top Right HUD Angle Pill */}
@@ -554,25 +540,11 @@ export function LandingPage({
 
             {/* Athlete Pose Skeleton SVG */}
             <div className="relative z-10 flex items-center justify-center my-auto">
-              <svg viewBox="0 0 260 110" className="w-full max-h-[58px] sm:max-h-[66px] drop-shadow-[0_0_8px_rgba(0,245,160,0.35)]">
-                {/* Torso line */}
-                <line x1="85" y1="45" x2="145" y2="55" stroke="#00D9F5" strokeWidth="3" strokeLinecap="round" />
-                {/* Upper arm */}
-                <line x1="85" y1="45" x2="68" y2="78" stroke="#00F5A0" strokeWidth="3" strokeLinecap="round" />
-                {/* Forearm */}
-                <line x1="68" y1="78" x2="82" y2="98" stroke="#00F5A0" strokeWidth="3" strokeLinecap="round" />
-                {/* Legs */}
-                <line x1="145" y1="55" x2="195" y2="75" stroke="#00D9F5" strokeWidth="3" strokeLinecap="round" />
-                <line x1="195" y1="75" x2="225" y2="98" stroke="#00D9F5" strokeWidth="3" strokeLinecap="round" />
-                {/* Landmark Keypoints */}
-                <circle cx="60" cy="38" r="6" fill="#3B82F6" stroke="#ffffff" strokeWidth="1.5" />
-                <circle cx="85" cy="45" r="3.5" fill="#00F5A0" stroke="#ffffff" strokeWidth="1.5" />
-                <circle cx="68" cy="78" r="4.5" fill="#F59E0B" stroke="#ffffff" strokeWidth="1.5" />
-                <circle cx="82" cy="98" r="3.5" fill="#00F5A0" stroke="#ffffff" strokeWidth="1.5" />
-                <circle cx="145" cy="55" r="3.5" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                <circle cx="195" cy="75" r="3.5" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                <circle cx="225" cy="98" r="3.5" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-              </svg>
+              <PushUpSkeletonVisual
+                stage="card"
+                showFloor={true}
+                className="w-full max-h-[58px] sm:max-h-[66px] drop-shadow-[0_0_8px_rgba(0,245,160,0.35)]"
+              />
             </div>
 
             {/* Bottom HUD Row */}

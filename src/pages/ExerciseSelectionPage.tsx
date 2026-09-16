@@ -16,6 +16,7 @@ import { EXERCISE_CONFIGS } from '../services/mockData';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { ShowMeHowModal } from '../components/workout/ShowMeHowModal';
+import { PushUpSkeletonVisual } from '../components/workout/PushUpSkeletonVisual';
 
 export interface ExerciseSelectionPageProps {
   onSelectExercise: (exerciseId: ExerciseType) => void;
@@ -107,25 +108,11 @@ export function ExerciseSelectionPage({ onSelectExercise, onBack }: ExerciseSele
                   {/* SVG Skeletal Movement Representation */}
                   <div className="relative z-10 flex items-center justify-center py-0.5">
                     {isPush ? (
-                      <svg viewBox="0 0 240 120" className="w-full max-h-[54px] sm:max-h-[60px] drop-shadow-[0_0_8px_rgba(0,245,160,0.3)]">
-                        {/* Body Torso line */}
-                        <line x1="80" y1="50" x2="140" y2="60" stroke="#00D9F5" strokeWidth="3.5" strokeLinecap="round" />
-                        {/* Arm Upper */}
-                        <line x1="80" y1="50" x2="60" y2="85" stroke="#00F5A0" strokeWidth="3.5" strokeLinecap="round" />
-                        {/* Arm Forearm */}
-                        <line x1="60" y1="85" x2="75" y2="105" stroke="#00F5A0" strokeWidth="3.5" strokeLinecap="round" />
-                        {/* Legs */}
-                        <line x1="140" y1="60" x2="190" y2="80" stroke="#00D9F5" strokeWidth="3.5" strokeLinecap="round" />
-                        <line x1="190" y1="80" x2="220" y2="105" stroke="#00D9F5" strokeWidth="3.5" strokeLinecap="round" />
-                        {/* Landmark Nodes */}
-                        <circle cx="55" cy="40" r="7" fill="#3B82F6" stroke="#ffffff" strokeWidth="1.5" />
-                        <circle cx="80" cy="50" r="4" fill="#00F5A0" stroke="#ffffff" strokeWidth="1.5" />
-                        <circle cx="60" cy="85" r="5" fill="#F59E0B" stroke="#ffffff" strokeWidth="1.5" />
-                        <circle cx="75" cy="105" r="4" fill="#00F5A0" stroke="#ffffff" strokeWidth="1.5" />
-                        <circle cx="140" cy="60" r="4" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                        <circle cx="190" cy="80" r="4" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                        <circle cx="220" cy="105" r="4" fill="#00D9F5" stroke="#ffffff" strokeWidth="1.5" />
-                      </svg>
+                      <PushUpSkeletonVisual
+                        stage="card"
+                        showFloor={true}
+                        className="w-full max-h-[54px] sm:max-h-[60px] drop-shadow-[0_0_8px_rgba(0,245,160,0.3)]"
+                      />
                     ) : (
                       <svg viewBox="0 0 240 120" className="w-full max-h-[54px] sm:max-h-[60px] drop-shadow-[0_0_8px_rgba(0,217,245,0.3)]">
                         {/* Torso inclined */}
