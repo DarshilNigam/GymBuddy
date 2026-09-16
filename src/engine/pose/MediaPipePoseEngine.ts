@@ -154,6 +154,12 @@ export class MediaPipePoseEngine implements IPoseEngine {
       await this.init();
     }
 
+    // Cancel any existing loop if active before starting on new video element
+    if (this.animFrameId !== null) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+
     this.running = true;
     this.onFrameCallback = onFrame;
     this.fpsLastTimestamp = performance.now();

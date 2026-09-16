@@ -234,6 +234,10 @@ class AuthService {
     }
 
     if (isSupabaseConfigured()) {
+      const emailRedirectTo = typeof window !== 'undefined' && window.location.origin
+        ? window.location.origin
+        : undefined;
+
       const { data, error } = await supabase.auth.signUp({
         email: normalizedEmail,
         password,
@@ -242,6 +246,7 @@ class AuthService {
             name: trimmedName,
             full_name: trimmedName,
           },
+          emailRedirectTo,
         },
       });
 

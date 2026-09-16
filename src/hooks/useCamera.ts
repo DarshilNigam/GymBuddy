@@ -183,6 +183,18 @@ export function useCamera(options: UseCameraOptions = {}): UseCameraReturn {
     [startCamera, stopCamera]
   );
 
+  // Synchronize stream with video element whenever stream changes or video element mounts
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      if (videoRef.current.srcObject !== stream) {
+        videoRef.current.srcObject = stream;
+      }
+      videoRef.current.play().catch((err) => {
+        console.warn('Video auto-play warning:', err);
+      });
+    }
+  }, [stream]);
+
   // Auto-start on mount if requested
   useEffect(() => {
     if (autoStart) {

@@ -8,6 +8,7 @@ import { cn } from '../../utils/cn';
 export interface CameraFeedProps {
   videoRef: React.RefObject<HTMLVideoElement>;
   isStreaming: boolean;
+  stream?: MediaStream | null;
   isMirrored: boolean;
   onToggleMirror: () => void;
   detectionState: DetectionState;
@@ -22,6 +23,7 @@ export interface CameraFeedProps {
 export function CameraFeed({
   videoRef,
   isStreaming,
+  stream,
   isMirrored,
   onToggleMirror,
   detectionState,
@@ -34,6 +36,23 @@ export function CameraFeed({
 }: CameraFeedProps) {
   const isPersonInFrame = detectionState.isPersonInFrame;
   const isModelReady = detectionState.isModelLoaded;
+
+  // Ensure the video element is connected to the stream when mounted or stream updates
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (stream && isStreaming) {
+      if (video.srcObject !== stream) {
+        video.srcObject = stream;
+      }
+      video.play().catch((err) => {
+        console.warn('CameraFeed video play catch:', err);
+      });
+    } else if (!isStreaming) {
+      video.srcObject = null;
+    }
+  }, [stream, isStreaming, videoRef]);
 
   return (
     <div
@@ -48,8 +67,11 @@ export function CameraFeed({
         playsInline
         muted
         autoPlay
+        onLoadedMetadata={(e) => {
+          e.currentTarget.play().catch(() => {});
+        }}
         className={cn(
-          'w-full h-full object-cover transition-transform duration-200',
+          'w-full h-full object-cover transition-transform duration-200 z-[1]',
           isMirrored && 'scale-x-[-1]',
           !isStreaming && 'hidden'
         )}

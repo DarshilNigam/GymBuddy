@@ -31,6 +31,7 @@ export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPagePr
   // 1. Initialize camera
   const {
     videoRef,
+    stream,
     isStreaming,
     isMirrored,
     toggleMirror,
@@ -72,6 +73,7 @@ export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPagePr
   const { detectionState, isModelLoading, error: modelError } = usePoseDetection({
     videoRef,
     isStreaming,
+    stream,
     onFrame: handlePoseFrame,
   });
 
@@ -115,6 +117,7 @@ export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPagePr
               <CameraFeed
                 videoRef={videoRef}
                 isStreaming={isStreaming}
+                stream={stream}
                 isMirrored={isMirrored}
                 onToggleMirror={toggleMirror}
                 detectionState={detectionState}
@@ -146,6 +149,7 @@ export function WorkoutPage({ exercise, onFinishWorkout, onExit }: WorkoutPagePr
                 <CameraFeed
                   videoRef={videoRef}
                   isStreaming={isStreaming}
+                  stream={stream}
                   isMirrored={isMirrored}
                   onToggleMirror={toggleMirror}
                   detectionState={detectionState}

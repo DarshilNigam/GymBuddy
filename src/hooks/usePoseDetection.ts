@@ -6,6 +6,7 @@ import { MediaPipePoseEngine, MediaPipePoseEngineOptions } from '../engine/pose/
 export interface UsePoseDetectionOptions {
   videoRef: React.RefObject<HTMLVideoElement>;
   isStreaming: boolean;
+  stream?: MediaStream | null;
   engineOptions?: MediaPipePoseEngineOptions;
   onFrame?: (frame: PoseFrameData, state: DetectionState) => void;
 }
@@ -23,6 +24,7 @@ export interface UsePoseDetectionReturn {
 export function usePoseDetection({
   videoRef,
   isStreaming,
+  stream,
   engineOptions,
   onFrame,
 }: UsePoseDetectionOptions): UsePoseDetectionReturn {
@@ -111,7 +113,7 @@ export function usePoseDetection({
         engine.stop();
       }
     };
-  }, [isStreaming, isEngineReady, videoRef, handleFrame]);
+  }, [isStreaming, isEngineReady, videoRef, stream, handleFrame]);
 
   return {
     detectionState,
