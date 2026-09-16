@@ -146,6 +146,13 @@ export class MediaPipePoseEngine implements IPoseEngine {
     }
   }
 
+  private currentVideoElement: HTMLVideoElement | null = null;
+
+  public updateVideoElement(videoElement: HTMLVideoElement): void {
+    this.currentVideoElement = videoElement;
+    this.lastVideoTime = -1;
+  }
+
   /**
    * Starts the real-time frame loop reading from the provided videoElement.
    */
@@ -153,6 +160,8 @@ export class MediaPipePoseEngine implements IPoseEngine {
     if (!this.landmarker) {
       await this.init();
     }
+
+    this.currentVideoElement = videoElement;
 
     // Cancel any existing loop if active before starting on new video element
     if (this.animFrameId !== null) {
@@ -169,6 +178,9 @@ export class MediaPipePoseEngine implements IPoseEngine {
     const processLoop = () => {
       if (!this.running) return;
 
+      const video = this.currentVideoElement || videoElement;
+      if (!video) return;
+
       const now = performance.now();
 
       // Measure real processing FPS
@@ -181,20 +193,22 @@ export class MediaPipePoseEngine implements IPoseEngine {
         this.fpsLastTimestamp = now;
       }
 
-      // Check if video is playing and ready
+      // Check if video element is still attached to the DOM and actively streaming
+      const isVideoConnected = typeof video.isConnected === 'boolean' ? video.isConnected : true;
       const isVideoReady =
-        videoElement.readyState >= 2 &&
-        !videoElement.paused &&
-        !videoElement.ended &&
-        videoElement.currentTime > 0;
+        isVideoConnected &&
+        video.readyState >= 2 &&
+        !video.paused &&
+        !video.ended &&
+        video.currentTime > 0;
 
       // Throttle inference according to target interval to avoid overworking the CPU/GPU
       const isTimeForInference = now - this.lastInferenceTime >= this.throttleIntervalMs;
-      const isNewFrame = videoElement.currentTime !== this.lastVideoTime;
+      const isNewFrame = video.currentTime !== this.lastVideoTime;
 
       if (isVideoReady && isTimeForInference && isNewFrame && !this.isInferenceRunning && this.landmarker) {
         this.isInferenceRunning = true;
-        this.lastVideoTime = videoElement.currentTime;
+        this.lastVideoTime = video.currentTime;
         this.lastInferenceTime = now;
 
         const startTime = performance.now();
@@ -204,7 +218,7 @@ export class MediaPipePoseEngine implements IPoseEngine {
 
         try {
           // detectForVideo synchronously processes the frame in MediaPipe wasm
-          result = this.landmarker.detectForVideo(videoElement, timestampMs);
+          result = this.landmarker.detectForVideo(video, timestampMs);
           this.currentLatencyMs = Math.round(performance.now() - startTime);
           this.state.latencyMs = this.currentLatencyMs;
         } catch (inferenceErr) {
@@ -278,6 +292,24 @@ export class MediaPipePoseEngine implements IPoseEngine {
             );
           }
         }
+      } else if (!isVideoReady && this.state.isPersonInFrame) {
+        // Video paused or detached: immediately clear tracking state
+        this.state.isPersonInFrame = false;
+        this.state.fps = 0;
+        this.state.calibrationScore = 0;
+        this.state.isPostureValid = false;
+
+        if (this.onFrameCallback) {
+          this.onFrameCallback(
+            {
+              timestamp: now,
+              landmarks: [],
+              detected: false,
+              confidence: 0,
+            },
+            { ...this.state }
+          );
+        }
       }
 
       this.animFrameId = requestAnimationFrame(processLoop);
@@ -287,7 +319,7 @@ export class MediaPipePoseEngine implements IPoseEngine {
   }
 
   /**
-   * Stops the active frame processing loop.
+   * Stops the active frame processing loop and resets tracking state.
    */
   public async stop(): Promise<void> {
     this.running = false;
@@ -296,6 +328,23 @@ export class MediaPipePoseEngine implements IPoseEngine {
       this.animFrameId = null;
     }
     this.isInferenceRunning = false;
+    this.currentVideoElement = null;
+    this.state.isPersonInFrame = false;
+    this.state.fps = 0;
+    this.state.calibrationScore = 0;
+    this.state.isPostureValid = false;
+
+    if (this.onFrameCallback) {
+      this.onFrameCallback(
+        {
+          timestamp: performance.now(),
+          landmarks: [],
+          detected: false,
+          confidence: 0,
+        },
+        { ...this.state }
+      );
+    }
   }
 
   /**

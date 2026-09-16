@@ -98,6 +98,7 @@ export function usePoseDetection({
     }
   }, []);
 
+  // Sync engine with video element & streaming state
   useEffect(() => {
     const engine = engineRef.current;
     const video = videoRef.current;
@@ -106,6 +107,14 @@ export function usePoseDetection({
       engine.start(video, handleFrame);
     } else if (!isStreaming && engine) {
       engine.stop();
+      setDetectionState((prev) => ({
+        ...prev,
+        isPersonInFrame: false,
+        isPostureValid: false,
+        fps: 0,
+        latencyMs: 0,
+        calibrationScore: 0,
+      }));
     }
 
     return () => {
